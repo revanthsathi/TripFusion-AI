@@ -1,12 +1,23 @@
-const { sendSuccess } = require("../utils/apiResponse");
+const { registerUser } = require("../services/authService");
+const { sendSuccess, sendError } = require("../utils/apiResponse");
 
 const register = async (req, res) => {
-    return sendSuccess(
-        res,
-        200,
-        "Register API is working!",
-        req.body
-    );
+    try {
+        const result = await registerUser(req.body);
+
+        return sendSuccess(
+            res,
+            201,
+            "OTP sent successfully. Please verify your email.",
+            result
+        );
+    } catch (error) {
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+    }
 };
 
 module.exports = {

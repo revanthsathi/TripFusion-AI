@@ -11,9 +11,14 @@ const sendEmail = async ({ to, subject, html }) => {
             html
         });
 
-        return response;
+        // Resend returns { data, error }
+        if (response.error) {
+            throw new Error(response.error.message || "Failed to send email.");
+        }
+
+        return response.data;
     } catch (error) {
-        console.error("Email Error:", error);
+        console.error("❌ Email Service Error:", error.message);
         throw error;
     }
 };
