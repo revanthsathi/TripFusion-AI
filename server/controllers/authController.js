@@ -2,6 +2,9 @@ const {
     registerUser,
     verifyOTP,
     loginUser,
+    forgotPassword,
+    resetPassword,
+    resendOTP,
     updateProfile,
     uploadProfileImage
 } = require("../services/authService");
@@ -103,7 +106,111 @@ const login = async (req, res) => {
 };
 
 // =======================
-// Logged In User
+// Forgot Password
+// =======================
+const forgotUserPassword = async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        const result = await forgotPassword(email);
+
+        return sendSuccess(
+            res,
+            200,
+            "Password reset email sent successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
+// Reset Password
+// =======================
+const resetUserPassword = async (req, res) => {
+
+    try {
+
+        const {
+            email,
+            otp,
+            newPassword
+        } = req.body;
+
+        const result = await resetPassword(
+            email,
+            otp,
+            newPassword
+        );
+
+        return sendSuccess(
+            res,
+            200,
+            "Password reset successful.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
+// Resend OTP
+// =======================
+const resendUserOTP = async (req, res) => {
+
+    try {
+
+        const { email } = req.body;
+
+        const result = await resendOTP(email);
+
+        return sendSuccess(
+            res,
+            200,
+            "OTP sent successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
+// Get Logged In User
 // =======================
 const getMe = async (req, res) => {
 
@@ -120,6 +227,7 @@ const getMe = async (req, res) => {
 // Update Profile
 // =======================
 const updateUserProfile = async (req, res) => {
+
     try {
 
         const result = await updateProfile(
@@ -145,6 +253,7 @@ const updateUserProfile = async (req, res) => {
         );
 
     }
+
 };
 
 // =======================
@@ -153,14 +262,6 @@ const updateUserProfile = async (req, res) => {
 const uploadPhoto = async (req, res) => {
 
     try {
-
-        console.log("==================================");
-        console.log("UPLOAD ROUTE HIT");
-        console.log("Logged In User:");
-        console.log(req.user);
-        console.log("Uploaded File:");
-        console.log(req.file);
-        console.log("==================================");
 
         if (!req.file) {
 
@@ -186,7 +287,6 @@ const uploadPhoto = async (req, res) => {
 
     } catch (error) {
 
-        console.error("UPLOAD ERROR:");
         console.error(error);
 
         return sendError(
@@ -203,6 +303,9 @@ module.exports = {
     register,
     verifyUserOTP,
     login,
+    forgotUserPassword,
+    resetUserPassword,
+    resendUserOTP,
     getMe,
     updateUserProfile,
     uploadPhoto

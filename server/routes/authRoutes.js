@@ -6,6 +6,9 @@ const {
     register,
     verifyUserOTP,
     login,
+    forgotUserPassword,
+    resetUserPassword,
+    resendUserOTP,
     getMe,
     updateUserProfile,
     uploadPhoto
@@ -14,7 +17,10 @@ const {
 const {
     registerValidator,
     verifyOTPValidator,
-    loginValidator
+    loginValidator,
+    forgotPasswordValidator,
+    resetPasswordValidator,
+    resendOTPValidator
 } = require("../validators/authValidators");
 
 const {
@@ -53,6 +59,36 @@ router.post(
     loginValidator,
     validate,
     login
+);
+
+// =======================
+// Forgot Password
+// =======================
+router.post(
+    "/forgot-password",
+    forgotPasswordValidator,
+    validate,
+    forgotUserPassword
+);
+
+// =======================
+// Reset Password
+// =======================
+router.post(
+    "/reset-password",
+    resetPasswordValidator,
+    validate,
+    resetUserPassword
+);
+
+// =======================
+// Resend OTP
+// =======================
+router.post(
+    "/resend-otp",
+    resendOTPValidator,
+    validate,
+    resendUserOTP
 );
 
 // =======================

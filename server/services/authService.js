@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs-extra");
 
@@ -6,7 +7,7 @@ const generateOTP = require("../utils/generateOTP");
 const generateToken = require("../utils/generateToken");
 const sendEmail = require("./emailService");
 const verifyEmailTemplate = require("../templates/emails/verifyEmail");
-
+const resetPasswordTemplate = require("../templates/emails/resetPassword");
 const OTP_EXPIRY_MINUTES = 5;
 
 // =======================
@@ -139,6 +140,133 @@ const loginUser = async (email, password) => {
 };
 
 // =======================
+// Forgot Password
+// =======================
+const forgotPassword = async (email) => {
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    const otp = generateOTP();
+
+    user.resetPasswordOTP = otp;
+    user.resetPasswordOTPExpires = new Date(
+        Date.now() + 15 * 60 * 1000
+    );
+
+    await user.save();
+
+    await sendEmail({
+    to: email,
+    subject: "TripFusion AI Password Reset OTP",
+    html: resetPasswordTemplate(
+        user.fullName,
+        otp
+    )
+    });
+
+    return {
+        email: user.email
+    };
+
+};
+// =======================
+// Reset Password
+// =======================
+const resetPassword = async (
+    email,
+    otp,
+    newPassword
+) => {
+
+    const user = await User.findOne({
+        email
+    }).select("+password");
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    if (
+        !user.resetPasswordOTP ||
+        !user.resetPasswordOTPExpires
+    ) {
+        throw new Error("Reset OTP not found.");
+    }
+
+    if (
+        user.resetPasswordOTPExpires <
+        new Date()
+    ) {
+        throw new Error("Reset OTP has expired.");
+    }
+
+    if (
+        user.resetPasswordOTP !== otp
+    ) {
+        throw new Error("Invalid OTP.");
+    }
+
+    user.password = newPassword;
+
+    user.resetPasswordOTP = null;
+    user.resetPasswordOTPExpires = null;
+
+    await user.save();
+
+    return {
+        email: user.email
+    };
+
+};
+// =======================
+// Resend OTP
+// =======================
+const resendOTP = async (email) => {
+
+    const user = await User.findOne({
+        email
+    });
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    if (user.isEmailVerified) {
+        throw new Error("Email is already verified.");
+    }
+
+    const otp = generateOTP();
+
+    user.verificationOTP = otp;
+
+    user.verificationOTPExpires =
+        new Date(
+            Date.now() +
+            OTP_EXPIRY_MINUTES * 60 * 1000
+        );
+
+    await user.save();
+
+    await sendEmail({
+        to: email,
+        subject: "Verify your TripFusion AI Account",
+        html: verifyEmailTemplate(
+            user.fullName,
+            otp
+        )
+    });
+
+    return {
+        email: user.email
+    };
+
+};
+
+// =======================
 // Update Profile
 // =======================
 const updateProfile = async (userId, profileData) => {
@@ -207,6 +335,9 @@ module.exports = {
     registerUser,
     verifyOTP,
     loginUser,
+    forgotPassword,
+    resetPassword,
+    resendOTP,
     updateProfile,
     uploadProfileImage
 };
