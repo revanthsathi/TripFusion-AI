@@ -30,6 +30,41 @@ const registerValidator = [
         .withMessage("Password must be at least 8 characters long.")
 ];
 
+const verifyOTPValidator = [
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required.")
+        .isEmail()
+        .withMessage("Enter a valid email address.")
+        .normalizeEmail(),
+
+    body("otp")
+        .trim()
+        .notEmpty()
+        .withMessage("OTP is required.")
+        .isLength({ min: 6, max: 6 })
+        .withMessage("OTP must be exactly 6 digits.")
+        .isNumeric()
+        .withMessage("OTP must contain only numbers.")
+];
+
+const loginValidator = [
+    body("email")
+        .trim()
+        .notEmpty()
+        .withMessage("Email is required.")
+        .isEmail()
+        .withMessage("Enter a valid email address.")
+        .normalizeEmail(),
+
+    body("password")
+        .notEmpty()
+        .withMessage("Password is required.")
+];
+
 module.exports = {
-    registerValidator
+    registerValidator,
+    verifyOTPValidator,
+    loginValidator
 };
