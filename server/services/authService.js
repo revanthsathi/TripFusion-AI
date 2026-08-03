@@ -1,3 +1,6 @@
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs-extra");
+
 const User = require("../models/User");
 const generateOTP = require("../utils/generateOTP");
 const generateToken = require("../utils/generateToken");
@@ -135,8 +138,75 @@ const loginUser = async (email, password) => {
     };
 };
 
+// =======================
+// Update Profile
+// =======================
+const updateProfile = async (userId, profileData) => {
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    Object.assign(user, profileData);
+
+    await user.save();
+
+    return user;
+};
+
+// =======================
+// Upload Profile Image
+// =======================
+const uploadProfileImage = async (userId, filePath) => {
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    // Delete previous Cloudinary image (optional)
+    if (
+        user.profileImage &&
+        user.profileImage.includes("cloudinary")
+    ) {
+        try {
+            const parts = user.profileImage.split("/");
+            const filename = parts[parts.length - 1];
+            const publicId =
+                "TripFusion/ProfileImages/" +
+                filename.substring(0, filename.lastIndexOf("."));
+
+            await cloudinary.uploader.destroy(publicId);
+        } catch (err) {
+            console.log("Old image not deleted.");
+        }
+    }
+
+    // Upload new image
+    const result = await cloudinary.uploader.upload(filePath, {
+        folder: "TripFusion/ProfileImages"
+    });
+
+    // Remove local file
+    await fs.remove(filePath);
+
+    // Save URL
+    user.profileImage = result.secure_url;
+
+    await user.save();
+
+    return {
+        profileImage: result.secure_url
+    };
+};
+
 module.exports = {
     registerUser,
     verifyOTP,
-    loginUser
+    loginUser,
+    updateProfile,
+    uploadProfileImage
 };

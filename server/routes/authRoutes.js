@@ -6,7 +6,9 @@ const {
     register,
     verifyUserOTP,
     login,
-    getMe
+    getMe,
+    updateUserProfile,
+    uploadPhoto
 } = require("../controllers/authController");
 
 const {
@@ -15,8 +17,13 @@ const {
     loginValidator
 } = require("../validators/authValidators");
 
+const {
+    updateProfileValidator
+} = require("../validators/userValidators");
+
 const validate = require("../middleware/validationMiddleware");
 const protect = require("../middleware/authMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 // =======================
 // Register
@@ -49,12 +56,33 @@ router.post(
 );
 
 // =======================
-// Get Logged In User
+// Logged In User
 // =======================
 router.get(
     "/me",
     protect,
     getMe
+);
+
+// =======================
+// Update Profile
+// =======================
+router.put(
+    "/profile",
+    protect,
+    updateProfileValidator,
+    validate,
+    updateUserProfile
+);
+
+// =======================
+// Upload Profile Image
+// =======================
+router.post(
+    "/upload-photo",
+    protect,
+    upload.single("profileImage"),
+    uploadPhoto
 );
 
 module.exports = router;

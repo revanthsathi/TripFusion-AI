@@ -1,7 +1,9 @@
 const {
     registerUser,
     verifyOTP,
-    loginUser
+    loginUser,
+    updateProfile,
+    uploadProfileImage
 } = require("../services/authService");
 
 const {
@@ -10,10 +12,11 @@ const {
 } = require("../utils/apiResponse");
 
 // =======================
-// Register User
+// Register
 // =======================
 const register = async (req, res) => {
     try {
+
         const result = await registerUser(req.body);
 
         return sendSuccess(
@@ -22,12 +25,17 @@ const register = async (req, res) => {
             "OTP sent successfully. Please verify your email.",
             result
         );
+
     } catch (error) {
+
+        console.error(error);
+
         return sendError(
             res,
             400,
             error.message
         );
+
     }
 };
 
@@ -36,6 +44,7 @@ const register = async (req, res) => {
 // =======================
 const verifyUserOTP = async (req, res) => {
     try {
+
         const { email, otp } = req.body;
 
         const result = await verifyOTP(email, otp);
@@ -46,23 +55,32 @@ const verifyUserOTP = async (req, res) => {
             "Email verified successfully.",
             result
         );
+
     } catch (error) {
+
+        console.error(error);
+
         return sendError(
             res,
             400,
             error.message
         );
+
     }
 };
 
 // =======================
-// Login User
+// Login
 // =======================
 const login = async (req, res) => {
     try {
+
         const { email, password } = req.body;
 
-        const result = await loginUser(email, password);
+        const result = await loginUser(
+            email,
+            password
+        );
 
         return sendSuccess(
             res,
@@ -70,38 +88,122 @@ const login = async (req, res) => {
             "Login successful.",
             result
         );
+
     } catch (error) {
+
+        console.error(error);
+
         return sendError(
             res,
             400,
             error.message
         );
+
     }
 };
 
 // =======================
-// Get Logged In User
+// Logged In User
 // =======================
 const getMe = async (req, res) => {
+
+    return sendSuccess(
+        res,
+        200,
+        "User profile fetched successfully.",
+        req.user
+    );
+
+};
+
+// =======================
+// Update Profile
+// =======================
+const updateUserProfile = async (req, res) => {
     try {
+
+        const result = await updateProfile(
+            req.user._id,
+            req.body
+        );
+
         return sendSuccess(
             res,
             200,
-            "User profile fetched successfully.",
-            req.user
+            "Profile updated successfully.",
+            result
         );
+
     } catch (error) {
+
+        console.error(error);
+
         return sendError(
             res,
             400,
             error.message
         );
+
     }
+};
+
+// =======================
+// Upload Profile Image
+// =======================
+const uploadPhoto = async (req, res) => {
+
+    try {
+
+        console.log("==================================");
+        console.log("UPLOAD ROUTE HIT");
+        console.log("Logged In User:");
+        console.log(req.user);
+        console.log("Uploaded File:");
+        console.log(req.file);
+        console.log("==================================");
+
+        if (!req.file) {
+
+            return sendError(
+                res,
+                400,
+                "Please upload an image."
+            );
+
+        }
+
+        const result = await uploadProfileImage(
+            req.user._id,
+            req.file.path
+        );
+
+        return sendSuccess(
+            res,
+            200,
+            "Profile image uploaded successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error("UPLOAD ERROR:");
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
 };
 
 module.exports = {
     register,
     verifyUserOTP,
     login,
-    getMe
+    getMe,
+    updateUserProfile,
+    uploadPhoto
 };
