@@ -4,7 +4,10 @@ const fs = require("fs-extra");
 
 const User = require("../models/User");
 const generateOTP = require("../utils/generateOTP");
-const generateToken = require("../utils/generateToken");
+const {
+    generateAccessToken,
+    generateRefreshToken
+} = require("../utils/generateToken");
 const sendEmail = require("./emailService");
 const verifyEmailTemplate = require("../templates/emails/verifyEmail");
 const resetPasswordTemplate = require("../templates/emails/resetPassword");
@@ -24,6 +27,11 @@ const registerUser = async (userData) => {
 
     const otp = generateOTP();
 
+    const hashedOTP = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
     const otpExpiry = new Date(
         Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000
     );
@@ -33,7 +41,7 @@ const registerUser = async (userData) => {
         email,
         phone,
         password,
-        verificationOTP: otp,
+        verificationOTP: hashedOTP,
         verificationOTPExpires: otpExpiry,
         isEmailVerified: false
     });
@@ -73,7 +81,12 @@ const verifyOTP = async (email, otp) => {
         throw new Error("OTP has expired.");
     }
 
-    if (user.verificationOTP !== otp) {
+    const hashedOTP = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
+    if (user.verificationOTP !== hashedOTP) {
         throw new Error("Invalid OTP.");
     }
 
@@ -83,10 +96,15 @@ const verifyOTP = async (email, otp) => {
 
     await user.save();
 
-    const token = generateToken(user._id);
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
     return {
-        token,
+        accessToken,
+        refreshToken,
         user: {
             id: user._id,
             fullName: user.fullName,
@@ -101,6 +119,9 @@ const verifyOTP = async (email, otp) => {
 // =======================
 const loginUser = async (email, password) => {
 
+    const MAX_LOGIN_ATTEMPTS = 5;
+    const LOCK_TIME = 30 * 60 * 1000; // 30 minutes
+
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
@@ -111,11 +132,47 @@ const loginUser = async (email, password) => {
         throw new Error("Please verify your email first.");
     }
 
-    const isPasswordCorrect = await user.comparePassword(password);
+    // =======================
+    // Check Account Lock
+    // =======================
+    if (
+        user.lockUntil &&
+        user.lockUntil > Date.now()
+    ) {
+        throw new Error(
+            "Account is locked. Try again after 30 minutes."
+        );
+    }
+
+    // =======================
+    // Verify Password
+    // =======================
+    const isPasswordCorrect =
+        await user.comparePassword(password);
 
     if (!isPasswordCorrect) {
+
+        user.loginAttempts += 1;
+
+        if (user.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+
+            user.lockUntil = new Date(
+                Date.now() + LOCK_TIME
+            );
+
+        }
+
+        await user.save();
+
         throw new Error("Invalid email or password.");
+
     }
+
+    // =======================
+    // Reset Failed Attempts
+    // =======================
+    user.loginAttempts = 0;
+    user.lockUntil = null;
 
     if (user.isBlocked) {
         throw new Error("Your account has been blocked.");
@@ -123,12 +180,18 @@ const loginUser = async (email, password) => {
 
     user.lastLogin = new Date();
 
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+
     await user.save();
 
-    const token = generateToken(user._id);
-
     return {
-        token,
+
+        accessToken,
+        refreshToken,
+
         user: {
             id: user._id,
             fullName: user.fullName,
@@ -136,7 +199,68 @@ const loginUser = async (email, password) => {
             role: user.role,
             isEmailVerified: user.isEmailVerified
         }
+
     };
+
+};
+// =======================
+// Refresh Token
+// =======================
+const refreshAccessToken = async (refreshToken) => {
+
+    if (!refreshToken) {
+        throw new Error("Refresh token is required.");
+    }
+
+    const jwt = require("jsonwebtoken");
+
+    let decoded;
+
+    try {
+        decoded = jwt.verify(
+            refreshToken,
+            process.env.JWT_REFRESH_SECRET
+        );
+    } catch (err) {
+        throw new Error("Invalid refresh token.");
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    if (user.refreshToken !== refreshToken) {
+        throw new Error("Refresh token mismatch.");
+    }
+
+    const newAccessToken = generateAccessToken(user._id);
+
+    return {
+        accessToken: newAccessToken
+    };
+
+};
+// =======================
+// Logout
+// =======================
+const logoutUser = async (userId) => {
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error("User not found.");
+    }
+
+    user.refreshToken = null;
+
+    await user.save();
+
+    return {
+        message: "Logged out successfully."
+    };
+
 };
 
 // =======================
@@ -152,7 +276,12 @@ const forgotPassword = async (email) => {
 
     const otp = generateOTP();
 
-    user.resetPasswordOTP = otp;
+    const hashedOTP = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
+    user.resetPasswordOTP = hashedOTP;
     user.resetPasswordOTPExpires = new Date(
         Date.now() + 15 * 60 * 1000
     );
@@ -204,8 +333,13 @@ const resetPassword = async (
         throw new Error("Reset OTP has expired.");
     }
 
+    const hashedOTP = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
     if (
-        user.resetPasswordOTP !== otp
+        user.resetPasswordOTP !== hashedOTP
     ) {
         throw new Error("Invalid OTP.");
     }
@@ -241,7 +375,12 @@ const resendOTP = async (email) => {
 
     const otp = generateOTP();
 
-    user.verificationOTP = otp;
+    const hashedOTP = crypto
+    .createHash("sha256")
+    .update(otp)
+    .digest("hex");
+
+    user.verificationOTP = hashedOTP;
 
     user.verificationOTPExpires =
         new Date(
@@ -335,6 +474,8 @@ module.exports = {
     registerUser,
     verifyOTP,
     loginUser,
+    refreshAccessToken,
+    logoutUser,
     forgotPassword,
     resetPassword,
     resendOTP,

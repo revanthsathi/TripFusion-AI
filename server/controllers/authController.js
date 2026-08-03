@@ -2,6 +2,8 @@ const {
     registerUser,
     verifyOTP,
     loginUser,
+    refreshAccessToken,
+    logoutUser,
     forgotPassword,
     resetPassword,
     resendOTP,
@@ -106,6 +108,72 @@ const login = async (req, res) => {
 };
 
 // =======================
+// Refresh Token
+// =======================
+const refreshToken = async (req, res) => {
+
+    try {
+
+        const { refreshToken } = req.body;
+
+        const result = await refreshAccessToken(
+            refreshToken
+        );
+
+        return sendSuccess(
+            res,
+            200,
+            "Access token refreshed successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            401,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
+// Logout
+// =======================
+const logout = async (req, res) => {
+
+    try {
+
+        const result = await logoutUser(
+            req.user._id
+        );
+
+        return sendSuccess(
+            res,
+            200,
+            "Logout successful.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
 // Forgot Password
 // =======================
 const forgotUserPassword = async (req, res) => {
@@ -119,7 +187,7 @@ const forgotUserPassword = async (req, res) => {
         return sendSuccess(
             res,
             200,
-            "Password reset email sent successfully.",
+            "Password reset OTP sent successfully.",
             result
         );
 
@@ -303,6 +371,8 @@ module.exports = {
     register,
     verifyUserOTP,
     login,
+    refreshToken,
+    logout,
     forgotUserPassword,
     resetUserPassword,
     resendUserOTP,

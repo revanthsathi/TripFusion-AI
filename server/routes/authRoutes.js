@@ -6,6 +6,8 @@ const {
     register,
     verifyUserOTP,
     login,
+    refreshToken,
+    logout,
     forgotUserPassword,
     resetUserPassword,
     resendUserOTP,
@@ -59,6 +61,23 @@ router.post(
     loginValidator,
     validate,
     login
+);
+
+// =======================
+// Refresh Token
+// =======================
+router.post(
+    "/refresh-token",
+    refreshToken
+);
+
+// =======================
+// Logout
+// =======================
+router.post(
+    "/logout",
+    protect,
+    logout
 );
 
 // =======================
