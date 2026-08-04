@@ -1,5 +1,7 @@
 const {
-    searchLocation
+    searchLocation,
+    getRoute,
+    getNearbyPlaces
 } = require("../services/mapsService");
 
 const {
@@ -48,6 +50,102 @@ const search = async (req, res) => {
 
 };
 
+// =======================
+// Route
+// =======================
+const route = async (req, res) => {
+
+    try {
+
+        const { start, end } = req.query;
+
+        if (!start || !end) {
+            return sendError(
+                res,
+                400,
+                "Start and End are required."
+            );
+        }
+
+        const result =
+            await getRoute(start, end);
+
+        return sendSuccess(
+            res,
+            200,
+            "Route fetched successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
+// =======================
+// Nearby Places
+// =======================
+const nearby = async (req, res) => {
+
+    try {
+
+        const {
+            place,
+            type
+        } = req.query;
+
+        if (!place) {
+
+            return sendError(
+                res,
+                400,
+                "Place is required."
+            );
+
+        }
+
+        const result =
+            await getNearbyPlaces(
+                place,
+                type || "tourism"
+            );
+
+        return sendSuccess(
+            res,
+            200,
+            "Nearby places fetched successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
+
 module.exports = {
-    search
+
+    search,
+
+    route,
+
+    nearby
+
 };
