@@ -11,8 +11,12 @@ const swaggerSpec = require("./docs/swagger");
 const errorMiddleware = require("./middleware/errorMiddleware");
 const authLimiter = require("./middleware/rateLimiter");
 
+// =======================
+// Routes
+// =======================
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const destinationRoutes = require("./routes/destinationRoutes");
 
 const app = express();
 
@@ -40,10 +44,11 @@ app.use(
 );
 
 // =======================
-// Routes
+// API Routes
 // =======================
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/destinations", destinationRoutes);
 
 // =======================
 // Global Error Handler
