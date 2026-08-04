@@ -7,7 +7,8 @@ const {
     getAll,
     getById,
     update,
-    remove
+    remove,
+    uploadImages
 } = require("../controllers/destinationController");
 
 const {
@@ -18,6 +19,7 @@ const {
 const validate = require("../middleware/validationMiddleware");
 const protect = require("../middleware/authMiddleware");
 const authorize = require("../middleware/roleMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 // =======================
 // Create Destination
@@ -29,6 +31,17 @@ router.post(
     createDestinationValidator,
     validate,
     create
+);
+
+// =======================
+// Upload Destination Images
+// =======================
+router.post(
+    "/:id/upload-images",
+    protect,
+    authorize("admin"),
+    upload.array("images", 5),
+    uploadImages
 );
 
 // =======================

@@ -3,7 +3,8 @@ const {
     getAllDestinations,
     getDestinationById,
     updateDestination,
-    deleteDestination
+    deleteDestination,
+    uploadDestinationImages
 } = require("../services/destinationService");
 
 const {
@@ -50,7 +51,7 @@ const getAll = async (req, res) => {
     try {
 
         const destinations =
-            await getAllDestinations();
+            await getAllDestinations(req.query);
 
         return sendSuccess(
             res,
@@ -170,11 +171,55 @@ const remove = async (req, res) => {
     }
 
 };
+// =======================
+// Upload Destination Images
+// =======================
+const uploadImages = async (req, res) => {
+
+    try {
+
+        if (!req.files || req.files.length === 0) {
+
+            return sendError(
+                res,
+                400,
+                "Please upload at least one image."
+            );
+
+        }
+
+        const result =
+            await uploadDestinationImages(
+                req.params.id,
+                req.files
+            );
+
+        return sendSuccess(
+            res,
+            200,
+            "Images uploaded successfully.",
+            result
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+            res,
+            400,
+            error.message
+        );
+
+    }
+
+};
 
 module.exports = {
     create,
     getAll,
     getById,
     update,
-    remove
+    remove,
+    uploadImages
 };

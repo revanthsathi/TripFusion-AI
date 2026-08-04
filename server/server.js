@@ -8,6 +8,7 @@ const swaggerUi = require("swagger-ui-express");
 
 const connectDB = require("./config/db");
 const swaggerSpec = require("./docs/swagger");
+
 const errorMiddleware = require("./middleware/errorMiddleware");
 const authLimiter = require("./middleware/rateLimiter");
 
@@ -17,6 +18,7 @@ const authLimiter = require("./middleware/rateLimiter");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const destinationRoutes = require("./routes/destinationRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
@@ -49,6 +51,7 @@ app.use(
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/destinations", destinationRoutes);
+app.use("/api/ai", aiRoutes);
 
 // =======================
 // Global Error Handler
