@@ -26,7 +26,6 @@ const generateAITrip = async (
         interests
     } = tripData;
 
-    // Check Destination
     const destination =
         await Destination.findById(destinationId);
 
@@ -34,7 +33,6 @@ const generateAITrip = async (
         throw new Error("Destination not found.");
     }
 
-    // Generate AI Itinerary
     const aiResponse =
         await generateTripItinerary({
             destination: destination.name,
@@ -44,7 +42,6 @@ const generateAITrip = async (
             interests: interests.join(", ")
         });
 
-    // Save Trip
     const trip = await Trip.create({
 
         user: userId,
@@ -81,6 +78,113 @@ const generateAITrip = async (
 
 };
 
+// =======================
+// Get Logged-in User Trips
+// =======================
+const getUserTrips = async (userId) => {
+
+    return await Trip.find({
+        user: userId
+    })
+        .populate(
+            "destination",
+            "name country city images"
+        )
+        .sort({
+            createdAt: -1
+        });
+
+};
+
+// =======================
+// Get Trip By ID
+// =======================
+const getTripById = async (
+    tripId,
+    userId
+) => {
+
+    const trip = await Trip.findOne({
+        _id: tripId,
+        user: userId
+    }).populate("destination");
+
+    if (!trip) {
+        throw new Error(
+            "Trip not found."
+        );
+    }
+
+    return trip;
+
+};
+
+// =======================
+// Update Trip
+// =======================
+const updateTrip = async (
+    tripId,
+    userId,
+    updateData
+) => {
+
+    const trip =
+        await Trip.findOneAndUpdate(
+            {
+                _id: tripId,
+                user: userId
+            },
+            updateData,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).populate("destination");
+
+    if (!trip) {
+        throw new Error(
+            "Trip not found."
+        );
+    }
+
+    return trip;
+
+};
+
+// =======================
+// Delete Trip
+// =======================
+const deleteTrip = async (
+    tripId,
+    userId
+) => {
+
+    const trip =
+        await Trip.findOneAndDelete({
+            _id: tripId,
+            user: userId
+        });
+
+    if (!trip) {
+        throw new Error(
+            "Trip not found."
+        );
+    }
+
+    return;
+
+};
+
 module.exports = {
-    generateAITrip
+
+    generateAITrip,
+
+    getUserTrips,
+
+    getTripById,
+
+    updateTrip,
+
+    deleteTrip
+
 };
