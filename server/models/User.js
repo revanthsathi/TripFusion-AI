@@ -75,21 +75,9 @@ const userSchema = new mongoose.Schema(
             default: ""
         },
 
-        isEmailVerified: {
-            type: Boolean,
-            default: false
-        },
-
-        verificationOTP: {
-            type: String,
-            default: null
-        },
-
-        verificationOTPExpires: {
-            type: Date,
-            default: null
-        },
-
+        // =======================
+        // Password Reset
+        // =======================
         resetPasswordOTP: {
             type: String,
             default: null
@@ -100,6 +88,9 @@ const userSchema = new mongoose.Schema(
             default: null
         },
 
+        // =======================
+        // Security
+        // =======================
         isBlocked: {
             type: Boolean,
             default: false
@@ -135,19 +126,41 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-// Hash password before saving
+// =======================
+// Hash Password
+// =======================
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
+
+    if (!this.isModified("password")) {
+        return next();
+    }
 
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+
+    this.password = await bcrypt.hash(
+        this.password,
+        salt
+    );
 
     next();
+
 });
 
-// Compare password
-userSchema.methods.comparePassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+// =======================
+// Compare Password
+// =======================
+userSchema.methods.comparePassword = async function (
+    enteredPassword
+) {
+
+    return await bcrypt.compare(
+        enteredPassword,
+        this.password
+    );
+
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model(
+    "User",
+    userSchema
+);

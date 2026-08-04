@@ -1,12 +1,8 @@
 const {
     registerUser,
-    verifyOTP,
     loginUser,
     refreshAccessToken,
     logoutUser,
-    forgotPassword,
-    resetPassword,
-    resendOTP,
     updateProfile,
     uploadProfileImage
 } = require("../services/authService");
@@ -20,14 +16,17 @@ const {
 // Register
 // =======================
 const register = async (req, res) => {
+
     try {
 
-        const result = await registerUser(req.body);
+        const result = await registerUser(
+            req.body
+        );
 
         return sendSuccess(
             res,
             201,
-            "OTP sent successfully. Please verify your email.",
+            "Registration successful.",
             result
         );
 
@@ -42,45 +41,20 @@ const register = async (req, res) => {
         );
 
     }
-};
 
-// =======================
-// Verify OTP
-// =======================
-const verifyUserOTP = async (req, res) => {
-    try {
-
-        const { email, otp } = req.body;
-
-        const result = await verifyOTP(email, otp);
-
-        return sendSuccess(
-            res,
-            200,
-            "Email verified successfully.",
-            result
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        return sendError(
-            res,
-            400,
-            error.message
-        );
-
-    }
 };
 
 // =======================
 // Login
 // =======================
 const login = async (req, res) => {
+
     try {
 
-        const { email, password } = req.body;
+        const {
+            email,
+            password
+        } = req.body;
 
         const result = await loginUser(
             email,
@@ -105,6 +79,7 @@ const login = async (req, res) => {
         );
 
     }
+
 };
 
 // =======================
@@ -114,11 +89,14 @@ const refreshToken = async (req, res) => {
 
     try {
 
-        const { refreshToken } = req.body;
-
-        const result = await refreshAccessToken(
+        const {
             refreshToken
-        );
+        } = req.body;
+
+        const result =
+            await refreshAccessToken(
+                refreshToken
+            );
 
         return sendSuccess(
             res,
@@ -148,15 +126,15 @@ const logout = async (req, res) => {
 
     try {
 
-        const result = await logoutUser(
-            req.user._id
-        );
+        const result =
+            await logoutUser(
+                req.user._id
+            );
 
         return sendSuccess(
             res,
             200,
-            "Logout successful.",
-            result
+            result.message
         );
 
     } catch (error) {
@@ -174,111 +152,7 @@ const logout = async (req, res) => {
 };
 
 // =======================
-// Forgot Password
-// =======================
-const forgotUserPassword = async (req, res) => {
-
-    try {
-
-        const { email } = req.body;
-
-        const result = await forgotPassword(email);
-
-        return sendSuccess(
-            res,
-            200,
-            "Password reset OTP sent successfully.",
-            result
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        return sendError(
-            res,
-            400,
-            error.message
-        );
-
-    }
-
-};
-
-// =======================
-// Reset Password
-// =======================
-const resetUserPassword = async (req, res) => {
-
-    try {
-
-        const {
-            email,
-            otp,
-            newPassword
-        } = req.body;
-
-        const result = await resetPassword(
-            email,
-            otp,
-            newPassword
-        );
-
-        return sendSuccess(
-            res,
-            200,
-            "Password reset successful.",
-            result
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        return sendError(
-            res,
-            400,
-            error.message
-        );
-
-    }
-
-};
-
-// =======================
-// Resend OTP
-// =======================
-const resendUserOTP = async (req, res) => {
-
-    try {
-
-        const { email } = req.body;
-
-        const result = await resendOTP(email);
-
-        return sendSuccess(
-            res,
-            200,
-            "OTP sent successfully.",
-            result
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        return sendError(
-            res,
-            400,
-            error.message
-        );
-
-    }
-
-};
-
-// =======================
-// Get Logged In User
+// Logged In User
 // =======================
 const getMe = async (req, res) => {
 
@@ -294,14 +168,18 @@ const getMe = async (req, res) => {
 // =======================
 // Update Profile
 // =======================
-const updateUserProfile = async (req, res) => {
+const updateUserProfile = async (
+    req,
+    res
+) => {
 
     try {
 
-        const result = await updateProfile(
-            req.user._id,
-            req.body
-        );
+        const result =
+            await updateProfile(
+                req.user._id,
+                req.body
+            );
 
         return sendSuccess(
             res,
@@ -327,7 +205,10 @@ const updateUserProfile = async (req, res) => {
 // =======================
 // Upload Profile Image
 // =======================
-const uploadPhoto = async (req, res) => {
+const uploadPhoto = async (
+    req,
+    res
+) => {
 
     try {
 
@@ -341,10 +222,11 @@ const uploadPhoto = async (req, res) => {
 
         }
 
-        const result = await uploadProfileImage(
-            req.user._id,
-            req.file.path
-        );
+        const result =
+            await uploadProfileImage(
+                req.user._id,
+                req.file.path
+            );
 
         return sendSuccess(
             res,
@@ -368,15 +250,19 @@ const uploadPhoto = async (req, res) => {
 };
 
 module.exports = {
+
     register,
-    verifyUserOTP,
+
     login,
+
     refreshToken,
+
     logout,
-    forgotUserPassword,
-    resetUserPassword,
-    resendUserOTP,
+
     getMe,
+
     updateUserProfile,
+
     uploadPhoto
+
 };

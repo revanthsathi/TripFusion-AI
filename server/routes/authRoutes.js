@@ -4,13 +4,9 @@ const router = express.Router();
 
 const {
     register,
-    verifyUserOTP,
     login,
     refreshToken,
     logout,
-    forgotUserPassword,
-    resetUserPassword,
-    resendUserOTP,
     getMe,
     updateUserProfile,
     uploadPhoto
@@ -18,11 +14,7 @@ const {
 
 const {
     registerValidator,
-    verifyOTPValidator,
-    loginValidator,
-    forgotPasswordValidator,
-    resetPasswordValidator,
-    resendOTPValidator
+    loginValidator
 } = require("../validators/authValidators");
 
 const {
@@ -41,16 +33,6 @@ router.post(
     registerValidator,
     validate,
     register
-);
-
-// =======================
-// Verify OTP
-// =======================
-router.post(
-    "/verify-otp",
-    verifyOTPValidator,
-    validate,
-    verifyUserOTP
 );
 
 // =======================
@@ -78,36 +60,6 @@ router.post(
     "/logout",
     protect,
     logout
-);
-
-// =======================
-// Forgot Password
-// =======================
-router.post(
-    "/forgot-password",
-    forgotPasswordValidator,
-    validate,
-    forgotUserPassword
-);
-
-// =======================
-// Reset Password
-// =======================
-router.post(
-    "/reset-password",
-    resetPasswordValidator,
-    validate,
-    resetUserPassword
-);
-
-// =======================
-// Resend OTP
-// =======================
-router.post(
-    "/resend-otp",
-    resendOTPValidator,
-    validate,
-    resendUserOTP
 );
 
 // =======================
