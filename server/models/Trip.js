@@ -61,11 +61,70 @@ const tripSchema = new mongoose.Schema(
             default: 0
         },
 
+        aiBudget: {
+            type: Number,
+            default: 0
+        },
+
         spentBudget: {
             type: Number,
             default: 0
         },
 
+        interests: [
+            {
+                type: String
+            }
+        ],
+
+        // =======================
+        // AI Generated Response
+        // =======================
+        aiResponse: {
+            destination: String,
+            budget: Number,
+            numberOfDays: Number,
+            travelers: Number,
+
+            days: [
+                {
+                    day: Number,
+                    morning: String,
+                    afternoon: String,
+                    evening: String
+                }
+            ],
+
+            budgetBreakdown: {
+                hotel: String,
+                food: String,
+                transport: String,
+                activities: String,
+                shopping: String
+            },
+
+            recommendedHotels: [
+                {
+                    name: String,
+                    reason: String
+                }
+            ],
+
+            recommendedRestaurants: [
+                {
+                    name: String,
+                    speciality: String
+                }
+            ],
+
+            packingTips: [String],
+
+            weatherAdvice: String
+        },
+
+        // =======================
+        // Manual Itinerary
+        // =======================
         itinerary: [
             {
                 day: Number,
@@ -119,7 +178,9 @@ const tripSchema = new mongoose.Schema(
     }
 );
 
+// =======================
 // Indexes
+// =======================
 tripSchema.index({
     user: 1
 });

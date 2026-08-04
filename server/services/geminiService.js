@@ -9,7 +9,7 @@ const model = genAI.getGenerativeModel({
 });
 
 // =======================
-// Generate Trip Itinerary
+// Generate AI Trip Itinerary
 // =======================
 const generateTripItinerary = async (tripData) => {
 
@@ -22,42 +22,92 @@ const generateTripItinerary = async (tripData) => {
     } = tripData;
 
     const prompt = `
-You are an expert travel planner.
+You are TripFusion AI, an expert travel planner.
 
-Generate a detailed travel itinerary.
+Generate a complete travel itinerary.
 
 Destination: ${destination}
-Budget: ${budget}
+Budget: ₹${budget}
 Number of Days: ${numberOfDays}
 Travelers: ${travelers}
 Interests: ${interests}
 
-Return the response using the following format:
+IMPORTANT INSTRUCTIONS:
 
-Day 1:
-Morning:
-Afternoon:
-Evening:
+1. Return ONLY valid JSON.
+2. Do NOT return markdown.
+3. Do NOT wrap the response in \`\`\`json.
+4. Do NOT write explanations.
+5. Return exactly in the following structure.
 
-Day 2:
-Morning:
-Afternoon:
-Evening:
+{
+  "destination": "",
+  "budget": 0,
+  "numberOfDays": 0,
+  "travelers": 0,
 
-Budget Breakdown
+  "days": [
+    {
+      "day": 1,
+      "morning": "",
+      "afternoon": "",
+      "evening": ""
+    }
+  ],
 
-Recommended Hotels
+  "budgetBreakdown": {
+    "hotel": "",
+    "food": "",
+    "transport": "",
+    "activities": "",
+    "shopping": ""
+  },
 
-Recommended Restaurants
+  "recommendedHotels": [
+    {
+      "name": "",
+      "reason": ""
+    }
+  ],
 
-Packing Tips
+  "recommendedRestaurants": [
+    {
+      "name": "",
+      "speciality": ""
+    }
+  ],
 
-Weather Advice
+  "packingTips": [
+    ""
+  ],
+
+  "weatherAdvice": ""
+}
 `;
 
     const result = await model.generateContent(prompt);
 
-    return result.response.text();
+    let response = result.response.text();
+
+    // Remove markdown if Gemini returns it
+    response = response
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+    try {
+
+        return JSON.parse(response);
+
+    } catch (error) {
+
+        console.error("Gemini JSON Parse Error:", error);
+
+        throw new Error(
+            "Gemini returned an invalid JSON response."
+        );
+
+    }
 
 };
 
