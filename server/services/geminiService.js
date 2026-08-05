@@ -9,87 +9,189 @@ const model = genAI.getGenerativeModel({
 });
 
 // =======================
-// Generate AI Trip Itinerary
+// Generate AI Trip
 // =======================
 const generateTripItinerary = async (tripData) => {
 
     const {
+
         destination,
+
         budget,
+
         numberOfDays,
+
         travelers,
-        interests
+
+        interests,
+
+        weather,
+
+        nearbyPlaces,
+
+        nearbyHotels,
+
+        nearbyRestaurants
+
     } = tripData;
 
     const prompt = `
-You are TripFusion AI, an expert travel planner.
+You are TripFusion AI.
 
-Generate a complete travel itinerary.
+You are an intelligent travel planner.
 
-Destination: ${destination}
-Budget: ₹${budget}
-Number of Days: ${numberOfDays}
-Travelers: ${travelers}
-Interests: ${interests}
+Generate a realistic travel itinerary.
 
-IMPORTANT INSTRUCTIONS:
+==============================
+TRIP DETAILS
+==============================
 
-1. Return ONLY valid JSON.
-2. Do NOT return markdown.
-3. Do NOT wrap the response in \`\`\`json.
-4. Do NOT write explanations.
-5. Return exactly in the following structure.
+Destination:
+${destination}
+
+Budget:
+₹${budget}
+
+Days:
+${numberOfDays}
+
+Travelers:
+${travelers}
+
+Interests:
+${interests}
+
+==============================
+CURRENT WEATHER
+==============================
+
+Weather:
+${weather.weather}
+
+Description:
+${weather.description}
+
+Temperature:
+${weather.temperature} °C
+
+Humidity:
+${weather.humidity} %
+
+Wind Speed:
+${weather.windSpeed} m/s
+
+==============================
+NEARBY TOURIST PLACES
+==============================
+
+${nearbyPlaces}
+
+==============================
+NEARBY HOTELS
+==============================
+
+${nearbyHotels}
+
+==============================
+NEARBY RESTAURANTS
+==============================
+
+${nearbyRestaurants}
+
+==============================
+IMPORTANT
+==============================
+
+If weather is rainy,
+
+avoid beaches,
+
+water sports,
+
+boat rides,
+
+trekking.
+
+Recommend indoor activities.
+
+If weather is sunny,
+
+include beaches,
+
+water sports,
+
+forts,
+
+walking tours.
+
+Recommend nearby restaurants.
+
+Recommend nearby hotels.
+
+Distribute budget wisely.
+
+Return ONLY valid JSON.
+
+Do NOT return markdown.
+
+Do NOT return explanation.
+
+JSON Structure:
 
 {
-  "destination": "",
-  "budget": 0,
-  "numberOfDays": 0,
-  "travelers": 0,
+"destination":"",
+"budget":0,
+"numberOfDays":0,
+"travelers":0,
 
-  "days": [
-    {
-      "day": 1,
-      "morning": "",
-      "afternoon": "",
-      "evening": ""
-    }
-  ],
+"days":[
+{
+"day":1,
+"morning":"",
+"afternoon":"",
+"evening":"",
+"estimatedCost":"",
+"weather":"",
+"recommendedTransport":""
+}
+],
 
-  "budgetBreakdown": {
-    "hotel": "",
-    "food": "",
-    "transport": "",
-    "activities": "",
-    "shopping": ""
-  },
+"budgetBreakdown":{
+"hotel":"",
+"food":"",
+"transport":"",
+"activities":"",
+"shopping":""
+},
 
-  "recommendedHotels": [
-    {
-      "name": "",
-      "reason": ""
-    }
-  ],
+"recommendedHotels":[
+{
+"name":"",
+"reason":""
+}
+],
 
-  "recommendedRestaurants": [
-    {
-      "name": "",
-      "speciality": ""
-    }
-  ],
+"recommendedRestaurants":[
+{
+"name":"",
+"speciality":""
+}
+],
 
-  "packingTips": [
-    ""
-  ],
+"packingTips":[
+""
+],
 
-  "weatherAdvice": ""
+"weatherAdvice":""
 }
 `;
 
-    const result = await model.generateContent(prompt);
+    const result =
+        await model.generateContent(prompt);
 
-    let response = result.response.text();
+    let response =
+        result.response.text();
 
-    // Remove markdown if Gemini returns it
     response = response
         .replace(/```json/g, "")
         .replace(/```/g, "")
@@ -99,12 +201,14 @@ IMPORTANT INSTRUCTIONS:
 
         return JSON.parse(response);
 
-    } catch (error) {
+    }
 
-        console.error("Gemini JSON Parse Error:", error);
+    catch (error) {
+
+        console.log(response);
 
         throw new Error(
-            "Gemini returned an invalid JSON response."
+            "Gemini returned invalid JSON."
         );
 
     }
@@ -112,5 +216,7 @@ IMPORTANT INSTRUCTIONS:
 };
 
 module.exports = {
+
     generateTripItinerary
+
 };

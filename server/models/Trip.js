@@ -77,9 +77,6 @@ const tripSchema = new mongoose.Schema(
             }
         ],
 
-        // =======================
-        // AI Generated Response
-        // =======================
         aiResponse: {
             destination: String,
             budget: Number,
@@ -91,7 +88,10 @@ const tripSchema = new mongoose.Schema(
                     day: Number,
                     morning: String,
                     afternoon: String,
-                    evening: String
+                    evening: String,
+                    estimatedCost: String,
+                    weather: String,
+                    recommendedTransport: String
                 }
             ],
 
@@ -122,9 +122,6 @@ const tripSchema = new mongoose.Schema(
             weatherAdvice: String
         },
 
-        // =======================
-        // Manual Itinerary
-        // =======================
         itinerary: [
             {
                 day: Number,
@@ -178,24 +175,10 @@ const tripSchema = new mongoose.Schema(
     }
 );
 
-// =======================
-// Indexes
-// =======================
-tripSchema.index({
-    user: 1
-});
-
-tripSchema.index({
-    destination: 1
-});
-
-tripSchema.index({
-    status: 1
-});
-
-tripSchema.index({
-    startDate: 1
-});
+tripSchema.index({ user: 1 });
+tripSchema.index({ destination: 1 });
+tripSchema.index({ status: 1 });
+tripSchema.index({ startDate: 1 });
 
 module.exports = mongoose.model(
     "Trip",

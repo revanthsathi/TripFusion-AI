@@ -8,6 +8,12 @@ const expenseSchema = new mongoose.Schema(
             required: true
         },
 
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+
         title: {
             type: String,
             required: true,
@@ -22,6 +28,9 @@ const expenseSchema = new mongoose.Schema(
                 "food",
                 "shopping",
                 "activities",
+                "fuel",
+                "tickets",
+                "medical",
                 "other"
             ],
             default: "other"
@@ -57,6 +66,16 @@ const expenseSchema = new mongoose.Schema(
         notes: {
             type: String,
             default: ""
+        },
+
+        receiptImage: {
+            type: String,
+            default: ""
+        },
+
+        isAIExpense: {
+            type: Boolean,
+            default: false
         }
     },
     {
@@ -64,12 +83,24 @@ const expenseSchema = new mongoose.Schema(
     }
 );
 
+// =======================
+// Indexes
+// =======================
+
 expenseSchema.index({
     trip: 1
 });
 
 expenseSchema.index({
+    user: 1
+});
+
+expenseSchema.index({
     category: 1
+});
+
+expenseSchema.index({
+    date: 1
 });
 
 module.exports = mongoose.model(
