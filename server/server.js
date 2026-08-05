@@ -23,6 +23,7 @@ const tripRoutes = require("./routes/tripRoutes");
 const mapsRoutes = require("./routes/mapsRoutes");
 const weatherRoutes = require("./routes/weatherRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
+const hotelRoutes = require("./routes/hotelRoutes");
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use("/api/trips", tripRoutes);
 app.use("/api/maps", mapsRoutes);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/hotels", hotelRoutes);
 
 // =======================
 // Global Error Handler

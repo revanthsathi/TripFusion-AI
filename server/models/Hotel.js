@@ -1,10 +1,76 @@
 const mongoose = require("mongoose");
 
+const roomSchema = new mongoose.Schema(
+    {
+        roomType: {
+            type: String,
+            required: true
+        },
+
+        pricePerNight: {
+            type: Number,
+            required: true
+        },
+
+        maxGuests: {
+            type: Number,
+            required: true
+        },
+
+        totalRooms: {
+            type: Number,
+            default: 0
+        },
+
+        availableRooms: {
+            type: Number,
+            default: 0
+        }
+    },
+    {
+        _id: false
+    }
+);
+
+const reviewSchema = new mongoose.Schema(
+    {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+
+        rating: {
+            type: Number,
+            min: 1,
+            max: 5
+        },
+
+        comment: {
+            type: String,
+            default: ""
+        },
+
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    {
+        _id: false
+    }
+);
+
 const hotelSchema = new mongoose.Schema(
     {
         name: {
             type: String,
-            required: true
+            required: true,
+            trim: true
+        },
+
+        description: {
+            type: String,
+            default: ""
         },
 
         destination: {
@@ -15,40 +81,18 @@ const hotelSchema = new mongoose.Schema(
 
         address: {
             type: String,
-            default: ""
+            required: true
         },
 
-        description: {
-            type: String,
-            default: ""
-        },
-
-        images: [
-            String
-        ],
-
-        pricePerNight: {
+        latitude: {
             type: Number,
-            default: 0
+            required: true
         },
 
-        currency: {
-            type: String,
-            default: "INR"
-        },
-
-        rating: {
+        longitude: {
             type: Number,
-            default: 0
+            required: true
         },
-
-        amenities: [
-            String
-        ],
-
-        latitude: Number,
-
-        longitude: Number,
 
         contactNumber: {
             type: String,
@@ -58,6 +102,42 @@ const hotelSchema = new mongoose.Schema(
         website: {
             type: String,
             default: ""
+        },
+
+        images: [
+            {
+                type: String
+            }
+        ],
+
+        amenities: [
+            {
+                type: String
+            }
+        ],
+
+        rooms: [roomSchema],
+
+        averageRating: {
+            type: Number,
+            default: 0
+        },
+
+        totalReviews: {
+            type: Number,
+            default: 0
+        },
+
+        reviews: [reviewSchema],
+
+        available: {
+            type: Boolean,
+            default: true
+        },
+
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
         }
     },
     {
@@ -65,8 +145,25 @@ const hotelSchema = new mongoose.Schema(
     }
 );
 
+// =======================
+// Indexes
+// =======================
+
 hotelSchema.index({
     destination: 1
+});
+
+hotelSchema.index({
+    averageRating: -1
+});
+
+hotelSchema.index({
+    available: 1
+});
+
+hotelSchema.index({
+    latitude: 1,
+    longitude: 1
 });
 
 module.exports = mongoose.model(
