@@ -6,7 +6,8 @@ const {
     deleteHotel,
     searchHotels,
     addReview,
-    getReviews
+    getReviews,
+    uploadHotelImages
 } = require("../services/hotelService");
 
 const {
@@ -286,7 +287,51 @@ const fetchReviews = async (req, res) => {
     }
 
 };
+// =======================
+// Upload Hotel Images
+// =======================
+const uploadImages = async (req, res) => {
 
+    try {
+
+        const hotel =
+            await uploadHotelImages(
+
+                req.params.id,
+
+                req.files
+
+            );
+
+        return sendSuccess(
+
+            res,
+
+            200,
+
+            "Hotel images uploaded successfully.",
+
+            hotel
+
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+
+            res,
+
+            400,
+
+            error.message
+
+        );
+
+    }
+
+};
 module.exports = {
 
     addHotel,
@@ -303,6 +348,8 @@ module.exports = {
 
     createReview,
 
-    fetchReviews
+    fetchReviews,
+
+    uploadImages
 
 };

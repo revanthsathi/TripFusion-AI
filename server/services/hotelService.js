@@ -238,6 +238,32 @@ const getReviews = async (
     return hotel.reviews;
 
 };
+// =======================
+// Upload Hotel Images
+// =======================
+const uploadHotelImages = async (
+    hotelId,
+    files
+) => {
+
+    const hotel =
+        await Hotel.findById(hotelId);
+
+    if (!hotel) {
+        throw new Error("Hotel not found.");
+    }
+
+    const imageUrls = files.map(
+        file => file.path
+    );
+
+    hotel.images.push(...imageUrls);
+
+    await hotel.save();
+
+    return hotel;
+
+};
 module.exports = {
 
     createHotel,
@@ -254,6 +280,8 @@ module.exports = {
 
     addReview,
 
-    getReviews
+    getReviews,
+
+    uploadHotelImages
 
 };

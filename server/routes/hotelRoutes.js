@@ -4,6 +4,7 @@ const router = express.Router();
 
 const protect = require("../middleware/authMiddleware");
 const authorize = require("../middleware/roleMiddleware");
+const upload = require("../middleware/uploadMiddleware");
 
 const {
     validateHotel
@@ -17,7 +18,8 @@ const {
     removeHotel,
     search,
     createReview,
-    fetchReviews
+    fetchReviews,
+    uploadImages
 } = require("../controllers/hotelController");
 
 // =======================
@@ -70,6 +72,15 @@ router.post(
     authorize("admin"),
     validateHotel,
     addHotel
+);
+
+// Upload Hotel Images
+router.post(
+    "/:id/images",
+    protect,
+    authorize("admin"),
+    upload.array("images", 10),
+    uploadImages
 );
 
 // Update Hotel
