@@ -155,7 +155,89 @@ const searchHotels = async (
     return hotels;
 
 };
+// =======================
+// Add Review
+// =======================
+const addReview = async (
+    hotelId,
+    userId,
+    reviewData
+) => {
 
+    const hotel =
+        await Hotel.findById(hotelId);
+
+    if (!hotel) {
+        throw new Error(
+            "Hotel not found."
+        );
+    }
+
+    const alreadyReviewed =
+        hotel.reviews.find(
+            review =>
+                review.user.toString() ===
+                userId.toString()
+        );
+
+    if (alreadyReviewed) {
+        throw new Error(
+            "You already reviewed this hotel."
+        );
+    }
+
+    hotel.reviews.push({
+
+        user: userId,
+
+        rating: reviewData.rating,
+
+        comment: reviewData.comment
+
+    });
+
+    hotel.totalReviews =
+        hotel.reviews.length;
+
+    hotel.averageRating =
+        hotel.reviews.reduce(
+
+            (acc, item) =>
+                acc + item.rating,
+
+            0
+
+        ) / hotel.totalReviews;
+
+    await hotel.save();
+
+    return hotel;
+
+};
+
+// =======================
+// Get Reviews
+// =======================
+const getReviews = async (
+    hotelId
+) => {
+
+    const hotel =
+        await Hotel.findById(hotelId)
+            .populate(
+                "reviews.user",
+                "fullName profileImage"
+            );
+
+    if (!hotel) {
+        throw new Error(
+            "Hotel not found."
+        );
+    }
+
+    return hotel.reviews;
+
+};
 module.exports = {
 
     createHotel,
@@ -168,6 +250,10 @@ module.exports = {
 
     deleteHotel,
 
-    searchHotels
+    searchHotels,
+
+    addReview,
+
+    getReviews
 
 };

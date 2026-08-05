@@ -4,7 +4,9 @@ const {
     getHotelById,
     updateHotel,
     deleteHotel,
-    searchHotels
+    searchHotels,
+    addReview,
+    getReviews
 } = require("../services/hotelService");
 
 const {
@@ -195,6 +197,95 @@ const search = async (req, res) => {
     }
 
 };
+// =======================
+// Add Review
+// =======================
+const createReview = async (req, res) => {
+
+    try {
+
+        const hotel = await addReview(
+
+            req.params.id,
+
+            req.user._id,
+
+            req.body
+
+        );
+
+        return sendSuccess(
+
+            res,
+
+            201,
+
+            "Review added successfully.",
+
+            hotel
+
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+
+            res,
+
+            400,
+
+            error.message
+
+        );
+
+    }
+
+};
+
+// =======================
+// Get Reviews
+// =======================
+const fetchReviews = async (req, res) => {
+
+    try {
+
+        const reviews = await getReviews(
+
+            req.params.id
+
+        );
+
+        return sendSuccess(
+
+            res,
+
+            200,
+
+            "Reviews fetched successfully.",
+
+            reviews
+
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return sendError(
+
+            res,
+
+            400,
+
+            error.message
+
+        );
+
+    }
+
+};
 
 module.exports = {
 
@@ -208,6 +299,10 @@ module.exports = {
 
     removeHotel,
 
-    search
+    search,
+
+    createReview,
+
+    fetchReviews
 
 };

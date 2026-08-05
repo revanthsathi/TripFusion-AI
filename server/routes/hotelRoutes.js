@@ -15,7 +15,9 @@ const {
     fetchHotel,
     editHotel,
     removeHotel,
-    search
+    search,
+    createReview,
+    fetchReviews
 } = require("../controllers/hotelController");
 
 // =======================
@@ -34,10 +36,27 @@ router.get(
     search
 );
 
+// Get Hotel Reviews
+router.get(
+    "/:id/reviews",
+    fetchReviews
+);
+
 // Get Hotel By ID
 router.get(
     "/:id",
     fetchHotel
+);
+
+// =======================
+// Protected User Routes
+// =======================
+
+// Add Review
+router.post(
+    "/:id/reviews",
+    protect,
+    createReview
 );
 
 // =======================
