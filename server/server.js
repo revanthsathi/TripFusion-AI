@@ -27,6 +27,7 @@ const hotelRoutes = require("./routes/hotelRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const favoriteRoutes = require("./routes/favoriteRoutes");
 //const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
@@ -69,6 +70,7 @@ app.use("/api/hotels", hotelRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/favorites", favoriteRoutes);
 //app.use("/api/payments", paymentRoutes);
 
 // =======================
