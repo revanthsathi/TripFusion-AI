@@ -25,6 +25,8 @@ const weatherRoutes = require("./routes/weatherRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const hotelRoutes = require("./routes/hotelRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const recommendationRoutes = require("./routes/recommendationRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
 
@@ -64,6 +66,8 @@ app.use("/api/weather", weatherRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/recommendations", recommendationRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // =======================
 // Global Error Handler
