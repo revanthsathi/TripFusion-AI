@@ -36,10 +36,6 @@ const generateAITrip = async (
 
     } = tripData;
 
-    // =======================
-    // Find Destination
-    // =======================
-
     const destination =
         await Destination.findById(destinationId);
 
@@ -47,21 +43,16 @@ const generateAITrip = async (
         throw new Error("Destination not found.");
     }
 
-    // =======================
-    // Fetch Weather
-    // =======================
-
     let weather = {};
 
     try {
 
-        weather = await getCurrentWeather(
-            destination.name
-        );
+        weather =
+            await getCurrentWeather(
+                destination.name
+            );
 
     } catch (error) {
-
-        console.log("Weather Error:", error.message);
 
         weather = {
             weather: "Unknown",
@@ -72,10 +63,6 @@ const generateAITrip = async (
         };
 
     }
-
-    // =======================
-    // Fetch Nearby Places
-    // =======================
 
     let nearbyPlaces = { places: [] };
     let nearbyHotels = { places: [] };
@@ -89,11 +76,7 @@ const generateAITrip = async (
                 "tourism"
             );
 
-    } catch (error) {
-
-        console.log("Nearby Places Error:", error.message);
-
-    }
+    } catch (error) {}
 
     try {
 
@@ -103,11 +86,7 @@ const generateAITrip = async (
                 "accommodation"
             );
 
-    } catch (error) {
-
-        console.log("Nearby Hotels Error:", error.message);
-
-    }
+    } catch (error) {}
 
     try {
 
@@ -117,43 +96,49 @@ const generateAITrip = async (
                 "catering.restaurant"
             );
 
-    } catch (error) {
-
-        console.log("Nearby Restaurants Error:", error.message);
-
-    }
-
-    // =======================
-    // Clean Data
-    // =======================
+    } catch (error) {}
 
     const attractions = [
+
         ...new Set(
+
             nearbyPlaces.places
+
                 .filter(place => place.name)
+
                 .map(place => place.name)
+
         )
+
     ].join(", ");
 
     const hotels = [
+
         ...new Set(
+
             nearbyHotels.places
+
                 .filter(place => place.name)
+
                 .map(place => place.name)
+
         )
+
     ].join(", ");
 
     const restaurants = [
-        ...new Set(
-            nearbyRestaurants.places
-                .filter(place => place.name)
-                .map(place => place.name)
-        )
-    ].join(", ");
 
-    // =======================
-    // Generate AI Itinerary
-    // =======================
+        ...new Set(
+
+            nearbyRestaurants.places
+
+                .filter(place => place.name)
+
+                .map(place => place.name)
+
+        )
+
+    ].join(", ");
 
     const aiResponse =
         await generateTripItinerary({
@@ -177,10 +162,6 @@ const generateAITrip = async (
             nearbyRestaurants: restaurants
 
         });
-
-    // =======================
-    // Save Trip
-    // =======================
 
     const trip =
         await Trip.create({
@@ -221,8 +202,150 @@ const generateAITrip = async (
 
 };
 
+// =======================
+// Get User Trips
+// =======================
+const getUserTrips = async (
+    userId
+) => {
+
+    return await Trip.find({
+
+        user: userId
+
+    })
+
+        .populate(
+            "destination",
+            "name country state"
+        )
+
+        .sort({
+            createdAt: -1
+        });
+
+};
+
+// =======================
+// Get Trip By ID
+// =======================
+const getTripById = async (
+    tripId,
+    userId
+) => {
+
+    const trip =
+        await Trip.findOne({
+
+            _id: tripId,
+
+            user: userId
+
+        })
+
+            .populate("destination");
+
+    if (!trip) {
+
+        throw new Error(
+            "Trip not found."
+        );
+
+    }
+
+    return trip;
+
+};
+// =======================
+// Update Trip
+// =======================
+const updateTrip = async (
+
+    tripId,
+
+    userId,
+
+    updateData
+
+) => {
+
+    const trip =
+        await Trip.findOne({
+
+            _id: tripId,
+
+            user: userId
+
+        });
+
+    if (!trip) {
+
+        throw new Error(
+            "Trip not found."
+        );
+
+    }
+
+    Object.assign(
+        trip,
+        updateData
+    );
+
+    await trip.save();
+
+    return trip;
+
+};
+
+// =======================
+// Delete Trip
+// =======================
+const deleteTrip = async (
+
+    tripId,
+
+    userId
+
+) => {
+
+    const trip =
+        await Trip.findOne({
+
+            _id: tripId,
+
+            user: userId
+
+        });
+
+    if (!trip) {
+
+        throw new Error(
+            "Trip not found."
+        );
+
+    }
+
+    await Trip.findByIdAndDelete(
+        tripId
+    );
+
+    return true;
+
+};
+
+// =======================
+// Exports
+// =======================
 module.exports = {
 
-    generateAITrip
+    generateAITrip,
+
+    getUserTrips,
+
+    getTripById,
+
+    updateTrip,
+
+    deleteTrip
 
 };
