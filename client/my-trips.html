@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Trips | TripFusion AI</title>
+
+    <link
+        rel="stylesheet"
+        href="css/my-trips.css"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- =================================================
+         MOBILE OVERLAY
+    ================================================== -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div>
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    ✈
+                </span>
+
+                <span>
+                    TripFusion
+                    <strong>AI</strong>
+                </span>
+
+            </a>
+
+
+            <button
+                class="close-sidebar"
+                id="closeSidebar"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-label">
+                    MAIN MENU
+                </p>
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+
+                <a
+                    href="my-trips.html"
+                    class="nav-item active"
+                >
+
+                    <span class="nav-icon">
+                        ✈
+                    </span>
+
+                    My Trips
+
+                </a>
+
+
+                <a
+                    href="ai-planner.html"
+                    class="nav-item"
+                >
+
+                    <span class="nav-icon">
+                        ✦
+                    </span>
+
+                    AI Trip Planner
+
+                    <span class="nav-badge">
+                        AI
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+
+                    <span class="nav-icon">
+                        ◎
+                    </span>
+
+                    Destinations
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+
+                    <span class="nav-icon">
+                        ⌂
+                    </span>
+
+                    Hotels
+
+                </a>
+
+
+                <p class="nav-label second-label">
+                    MANAGE
+                </p>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+
+                    <span class="nav-icon">
+                        ▣
+                    </span>
+
+                    Bookings
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+
+                    <span class="nav-icon">
+                        ₹
+                    </span>
+
+                    Expenses
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+
+                    <span class="nav-icon">
+                        ♙
+                    </span>
+
+                    Profile
+
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-help">
+
+                <span class="help-icon">
+                    ✦
+                </span>
+
+                <div>
+
+                    <strong>
+                        Travel smarter
+                    </strong>
+
+                    <small>
+                        Powered by AI
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+                type="button"
+            >
+
+                <span>
+                    ↪
+                </span>
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+            >
+                ☰
+            </button>
+
+
+            <div class="topbar-title">
+
+                <span>
+                    YOUR JOURNEYS
+                </span>
+
+                <strong>
+                    My Trips
+                </strong>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button
+                    class="icon-button"
+                    type="button"
+                >
+                    ♧
+                    <span class="notification-dot"></span>
+                </button>
+
+
+                <div class="profile-menu">
+
+                    <div
+                        class="profile-avatar"
+                        id="topAvatar"
+                    >
+                        R
+                    </div>
+
+                    <div class="profile-summary">
+
+                        <strong id="topUserName">
+                            Traveler
+                        </strong>
+
+                        <span id="topUserEmail">
+                            ...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <div class="page-content">
+
+
+            <!-- PAGE HEADER -->
+
+            <section class="page-header">
+
+                <div>
+
+                    <p class="eyebrow">
+                        YOUR ADVENTURES
+                    </p>
+
+                    <h1>
+                        My Trips
+                    </h1>
+
+                    <p>
+                        Plan, manage and revisit all your
+                        adventures in one place.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    id="createTripButton"
+                    type="button"
+                >
+
+                    <span>
+                        ✦
+                    </span>
+
+                    Plan a new trip
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </section>
+
+
+            <!-- =================================================
+                 SEARCH + FILTERS
+            ================================================== -->
+
+            <section class="trip-controls">
+
+                <div class="search-box">
+
+                    <span>
+                        ⌕
+                    </span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search your trips..."
+                    >
+
+                </div>
+
+
+                <div class="filter-tabs">
+
+                    <button
+                        class="filter-tab active"
+                        data-filter="all"
+                        type="button"
+                    >
+                        All
+                        <span id="countAll">0</span>
+                    </button>
+
+
+                    <button
+                        class="filter-tab"
+                        data-filter="planning"
+                        type="button"
+                    >
+                        Upcoming
+                        <span id="countPlanning">0</span>
+                    </button>
+
+
+                    <button
+                        class="filter-tab"
+                        data-filter="ongoing"
+                        type="button"
+                    >
+                        Ongoing
+                        <span id="countOngoing">0</span>
+                    </button>
+
+
+                    <button
+                        class="filter-tab"
+                        data-filter="completed"
+                        type="button"
+                    >
+                        Completed
+                        <span id="countCompleted">0</span>
+                    </button>
+
+
+                    <button
+                        class="filter-tab"
+                        data-filter="cancelled"
+                        type="button"
+                    >
+                        Cancelled
+                        <span id="countCancelled">0</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TRIPS
+            ================================================== -->
+
+            <section>
+
+                <div
+                    id="tripsContainer"
+                    class="trips-grid"
+                >
+
+                    <!-- Loading -->
+
+                    <div class="loading-card"></div>
+                    <div class="loading-card"></div>
+                    <div class="loading-card"></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 EMPTY SEARCH
+            ================================================== -->
+
+            <div
+                id="noResults"
+                class="empty-state hidden"
+            >
+
+                <div class="empty-icon">
+                    ⌕
+                </div>
+
+                <h2>
+                    No trips found
+                </h2>
+
+                <p>
+                    Try a different search term or
+                    change the selected filter.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <footer class="page-footer">
+
+                <span>
+                    © 2026 TripFusion AI
+                </span>
+
+                <span>
+                    Travel smarter. Travel better.
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- =================================================
+         TRIP DETAILS MODAL
+    ================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="tripModal"
+    >
+
+        <div class="trip-modal">
+
+            <button
+                class="modal-close"
+                id="closeModal"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div
+                id="modalContent"
+                class="modal-content"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DELETE MODAL
+    ================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="deleteModal"
+    >
+
+        <div class="confirm-modal">
+
+            <div class="confirm-icon">
+                !
+            </div>
+
+            <h2>
+                Delete this trip?
+            </h2>
+
+            <p>
+                This action cannot be undone.
+                All trip information will be removed.
+            </p>
+
+
+            <div class="confirm-actions">
+
+                <button
+                    class="cancel-button"
+                    id="cancelDelete"
+                    type="button"
+                >
+                    Keep Trip
+                </button>
+
+                <button
+                    class="delete-button"
+                    id="confirmDelete"
+                    type="button"
+                >
+                    Delete Trip
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TOAST
+    ================================================== -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+
+        <span id="toastIcon">
+            ✓
+        </span>
+
+        <span id="toastMessage"></span>
+
+    </div>
+
+
+    <script src="js/api.js"></script>
+
+    <script src="js/auth.js"></script>
+
+    <script src="js/my-trips.js"></script>
+
+</body>
+</html>

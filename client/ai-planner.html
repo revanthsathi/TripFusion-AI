@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Trip Planner | TripFusion AI</title>
+
+    <link
+        rel="stylesheet"
+        href="css/ai-planner.css"
+    >
+
+</head>
+
+<body>
+
+    <aside class="sidebar" id="sidebar">
+
+        <div>
+
+            <a href="dashboard.html" class="logo">
+
+                <span class="logo-icon">✈</span>
+
+                <span>
+                    TripFusion <strong>AI</strong>
+                </span>
+
+            </a>
+
+
+            <nav>
+
+                <p class="nav-label">
+                    MAIN MENU
+                </p>
+
+                <a href="dashboard.html" class="nav-item">
+                    <span>⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="my-trips.html" class="nav-item">
+                    <span>✈</span>
+                    My Trips
+                </a>
+
+                <a href="ai-planner.html" class="nav-item active">
+                    <span>✦</span>
+                    AI Trip Planner
+                    <small>AI</small>
+                </a>
+
+                <a href="#" class="nav-item coming-soon">
+                    <span>◎</span>
+                    Destinations
+                </a>
+
+                <a href="#" class="nav-item coming-soon">
+                    <span>⌂</span>
+                    Hotels
+                </a>
+
+
+                <p class="nav-label manage">
+                    MANAGE
+                </p>
+
+                <a href="#" class="nav-item coming-soon">
+                    <span>▣</span>
+                    Bookings
+                </a>
+
+                <a href="#" class="nav-item coming-soon">
+                    <span>₹</span>
+                    Expenses
+                </a>
+
+                <a href="#" class="nav-item coming-soon">
+                    <span>♙</span>
+                    Profile
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="travel-box">
+
+                <span>✦</span>
+
+                <div>
+                    <strong>Travel smarter</strong>
+                    <small>Powered by AI</small>
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+            >
+                ↪ &nbsp; Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <header class="topbar">
+
+            <button
+                class="menu-button"
+                id="menuButton"
+            >
+                ☰
+            </button>
+
+
+            <div>
+
+                <span class="top-label">
+                    PLAN YOUR JOURNEY
+                </span>
+
+                <strong>
+                    AI Trip Planner
+                </strong>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <div
+                    class="avatar"
+                    id="topAvatar"
+                >
+                    T
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="topUserName">
+                        Traveler
+                    </strong>
+
+                    <span id="topUserEmail">
+                        ...
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="page">
+
+
+            <div class="page-intro">
+
+                <div>
+
+                    <span class="eyebrow">
+                        ✦ POWERED BY AI
+                    </span>
+
+                    <h1>
+                        Plan your perfect trip.
+                    </h1>
+
+                    <p>
+                        Tell us what you're looking for.
+                        TripFusion AI will create a personalized
+                        itinerary, budget and recommendations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="plannerForm"
+                class="planner-card"
+            >
+
+
+                <!-- DESTINATION -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-number">
+                            01
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                Where are you going?
+                            </h2>
+
+                            <p>
+                                Choose your destination.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <label>
+                        Destination
+                    </label>
+
+                    <select
+                        id="destinationId"
+                        required
+                    >
+
+                        <option value="">
+                            Select a destination
+                        </option>
+
+                    </select>
+
+                    <span
+                        class="field-error"
+                        id="destinationError"
+                    ></span>
+
+                </section>
+
+
+                <!-- BASIC DETAILS -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-number">
+                            02
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                Trip details
+                            </h2>
+
+                            <p>
+                                Give your journey a name and
+                                choose your travel dates.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+                        <div class="field full">
+
+                            <label for="title">
+                                Trip title
+                            </label>
+
+                            <input
+                                id="title"
+                                type="text"
+                                placeholder="e.g. Goa Beach Escape"
+                                maxlength="80"
+                                required
+                            >
+
+                            <span
+                                class="field-error"
+                                id="titleError"
+                            ></span>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="startDate">
+                                Start date
+                            </label>
+
+                            <input
+                                id="startDate"
+                                type="date"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="endDate">
+                                End date
+                            </label>
+
+                            <input
+                                id="endDate"
+                                type="date"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="date-error"
+                        id="dateError"
+                    ></div>
+
+                </section>
+
+
+                <!-- TRAVEL DETAILS -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-number">
+                            03
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                Tell us about your trip
+                            </h2>
+
+                            <p>
+                                Help the AI personalize your plan.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="field">
+
+                            <label for="travelers">
+                                Travelers
+                            </label>
+
+                            <div class="number-input">
+
+                                <button
+                                    type="button"
+                                    id="minusTravelers"
+                                >
+                                    −
+                                </button>
+
+                                <input
+                                    id="travelers"
+                                    type="number"
+                                    min="1"
+                                    max="20"
+                                    value="2"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    id="plusTravelers"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="tripType">
+                                Trip type
+                            </label>
+
+                            <select
+                                id="tripType"
+                                required
+                            >
+
+                                <option value="solo">
+                                    Solo
+                                </option>
+
+                                <option value="family">
+                                    Family
+                                </option>
+
+                                <option value="friends">
+                                    Friends
+                                </option>
+
+                                <option value="couple">
+                                    Couple
+                                </option>
+
+                                <option value="business">
+                                    Business
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="budgetLevel">
+                                Budget level
+                            </label>
+
+                            <select
+                                id="budgetLevel"
+                                required
+                            >
+
+                                <option value="low">
+                                    Low
+                                </option>
+
+                                <option
+                                    value="medium"
+                                    selected
+                                >
+                                    Medium
+                                </option>
+
+                                <option value="high">
+                                    High
+                                </option>
+
+                                <option value="luxury">
+                                    Luxury
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="estimatedBudget">
+                                Estimated budget
+                            </label>
+
+                            <div class="money-input">
+
+                                <span>₹</span>
+
+                                <input
+                                    id="estimatedBudget"
+                                    type="number"
+                                    min="0"
+                                    placeholder="50000"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- INTERESTS -->
+
+                <section class="form-section">
+
+                    <div class="section-title">
+
+                        <span class="section-number">
+                            04
+                        </span>
+
+                        <div>
+
+                            <h2>
+                                What are you interested in?
+                            </h2>
+
+                            <p>
+                                Select everything you'd enjoy.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="interest-grid"
+                        id="interestGrid"
+                    >
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Beach"
+                            >
+
+                            <span>
+                                🏖️
+                            </span>
+
+                            Beach
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Adventure"
+                            >
+
+                            <span>
+                                🧗
+                            </span>
+
+                            Adventure
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Food"
+                            >
+
+                            <span>
+                                🍜
+                            </span>
+
+                            Food
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Culture"
+                            >
+
+                            <span>
+                                🏛️
+                            </span>
+
+                            Culture
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Nature"
+                            >
+
+                            <span>
+                                🌿
+                            </span>
+
+                            Nature
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Shopping"
+                            >
+
+                            <span>
+                                🛍️
+                            </span>
+
+                            Shopping
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="Nightlife"
+                            >
+
+                            <span>
+                                🌃
+                            </span>
+
+                            Nightlife
+
+                        </label>
+
+
+                        <label class="interest">
+
+                            <input
+                                type="checkbox"
+                                value="History"
+                            >
+
+                            <span>
+                                🏺
+                            </span>
+
+                            History
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SUMMARY -->
+
+                <section class="summary-section">
+
+                    <div>
+
+                        <span class="summary-label">
+                            YOUR TRIP
+                        </span>
+
+                        <h3 id="summaryTitle">
+                            Your personalized journey
+                        </h3>
+
+                        <p id="summaryText">
+                            Choose your destination and dates
+                            to get started.
+                        </p>
+
+                    </div>
+
+                    <div class="summary-days">
+
+                        <strong id="summaryDays">
+                            0
+                        </strong>
+
+                        <span>
+                            DAYS
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ERROR -->
+
+                <div
+                    class="form-error"
+                    id="formError"
+                ></div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="generate-button"
+                    id="generateButton"
+                >
+
+                    <span class="button-normal">
+                        ✦ &nbsp; Generate My AI Trip
+                        <span>→</span>
+                    </span>
+
+                    <span
+                        class="button-loading"
+                        id="buttonLoading"
+                    >
+                        <span class="spinner"></span>
+                        Creating your journey...
+                    </span>
+
+                </button>
+
+
+                <p class="privacy-note">
+                    Your trip details are securely processed
+                    and saved to your TripFusion account.
+                </p>
+
+
+            </form>
+
+
+            <footer class="footer">
+
+                <span>
+                    © 2026 TripFusion AI
+                </span>
+
+                <span>
+                    Travel smarter. Travel better.
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- AI LOADING SCREEN -->
+
+    <div
+        class="generation-overlay"
+        id="generationOverlay"
+    >
+
+        <div class="generation-box">
+
+            <div class="ai-orb">
+                ✦
+            </div>
+
+            <span class="eyebrow">
+                TRIPFUSION AI
+            </span>
+
+            <h2>
+                Creating your journey...
+            </h2>
+
+            <p>
+                We're combining your preferences,
+                destination data and AI to build your trip.
+            </p>
+
+
+            <div class="generation-steps">
+
+                <div class="generation-step active">
+                    <span>✓</span>
+                    Preparing your preferences
+                </div>
+
+                <div class="generation-step">
+                    <span>○</span>
+                    Checking destination weather
+                </div>
+
+                <div class="generation-step">
+                    <span>○</span>
+                    Finding nearby places
+                </div>
+
+                <div class="generation-step">
+                    <span>○</span>
+                    Building your itinerary
+                </div>
+
+                <div class="generation-step">
+                    <span>○</span>
+                    Optimizing your trip
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ai-planner.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | TripFusion AI</title>
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+</head>
+
+<body>
+
+    <!-- Mobile Overlay -->
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-top">
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+                <span class="logo-icon">✈</span>
+
+                <span>
+                    TripFusion
+                    <strong>AI</strong>
+                </span>
+            </a>
+
+
+            <button
+                class="close-sidebar"
+                id="closeSidebar"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <nav class="sidebar-nav">
+
+                <p class="nav-label">
+                    MAIN MENU
+                </p>
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item active"
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">✈</span>
+                    <span>My Trips</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">✦</span>
+                    <span>AI Trip Planner</span>
+                    <span class="nav-badge">AI</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">◎</span>
+                    <span>Destinations</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">⌂</span>
+                    <span>Hotels</span>
+                </a>
+
+
+                <p class="nav-label second-label">
+                    MANAGE
+                </p>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">▣</span>
+                    <span>Bookings</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">₹</span>
+                    <span>Expenses</span>
+                </a>
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span class="nav-icon">♙</span>
+                    <span>Profile</span>
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="sidebar-help">
+
+                <span class="help-icon">✦</span>
+
+                <div>
+                    <strong>Travel smarter</strong>
+                    <small>Powered by AI</small>
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+                type="button"
+            >
+                <span>↪</span>
+                Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =================================================
+         MAIN
+    ================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+
+            <div class="topbar-search">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    placeholder="Search trips, hotels, destinations..."
+                    id="searchInput"
+                >
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button
+                    class="icon-button notification-button"
+                    type="button"
+                    aria-label="Notifications"
+                >
+                    ♧
+                    <span class="notification-dot"></span>
+                </button>
+
+
+                <div class="profile-menu">
+
+                    <div
+                        class="profile-avatar"
+                        id="topAvatar"
+                    >
+                        R
+                    </div>
+
+                    <div class="profile-summary">
+
+                        <strong id="topUserName">
+                            Loading...
+                        </strong>
+
+                        <span id="topUserEmail">
+                            ...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+
+        <div class="page-content">
+
+
+            <!-- HERO -->
+
+            <section class="welcome-section">
+
+                <div>
+
+                    <p class="eyebrow">
+                        YOUR TRAVEL HUB
+                    </p>
+
+                    <h1>
+                        Good to see you,
+                        <span id="welcomeName">
+                            Traveler
+                        </span>
+                        <span class="wave">👋</span>
+                    </h1>
+
+                    <p class="welcome-description">
+                        Everything you need for your next
+                        adventure, all in one place.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    id="planTripButton"
+                    type="button"
+                >
+                    <span>✦</span>
+                    Plan a trip with AI
+                    <span>→</span>
+                </button>
+
+            </section>
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+
+                    <div class="stat-icon purple">
+                        ✈
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            MY TRIPS
+                        </span>
+
+                        <strong id="totalTrips">
+                            —
+                        </strong>
+
+                        <small>
+                            Total trips created
+                        </small>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon blue">
+                        ▣
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            BOOKINGS
+                        </span>
+
+                        <strong id="totalBookings">
+                            —
+                        </strong>
+
+                        <small>
+                            Hotel bookings
+                        </small>
+
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon green">
+                        ₹
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>
+                            TOTAL SPENT
+                        </span>
+
+                        <strong id="totalSpent">
+                            ₹0
+                        </strong>
+
+                        <small>
+                            Paid bookings
+                        </small>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 MAIN GRID
+            ================================================== -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- UPCOMING TRIP -->
+
+                <article class="dashboard-card upcoming-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                NEXT ADVENTURE
+                            </span>
+
+                            <h2>
+                                Upcoming trip
+                            </h2>
+
+                        </div>
+
+                        <button
+                            class="text-button"
+                            type="button"
+                            data-coming-soon
+                        >
+                            View all →
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="upcomingTripContainer"
+                        class="upcoming-content"
+                    >
+
+                        <div class="loading-state">
+                            <div class="loading-line large"></div>
+                            <div class="loading-line"></div>
+                            <div class="loading-line small"></div>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <article class="dashboard-card quick-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="card-eyebrow">
+                                SHORTCUTS
+                            </span>
+
+                            <h2>
+                                Quick actions
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+                        <button
+                            class="quick-action primary-action"
+                            id="quickPlanTrip"
+                            type="button"
+                        >
+
+                            <span class="quick-action-icon">
+                                ✦
+                            </span>
+
+                            <span>
+                                <strong>
+                                    Plan a new trip
+                                </strong>
+
+                                <small>
+                                    Let AI build your itinerary
+                                </small>
+                            </span>
+
+                            <b>→</b>
+
+                        </button>
+
+
+                        <button
+                            class="quick-action"
+                            type="button"
+                            data-coming-soon
+                        >
+
+                            <span class="quick-action-icon">
+                                ⌂
+                            </span>
+
+                            <span>
+                                <strong>
+                                    Find hotels
+                                </strong>
+
+                                <small>
+                                    Discover your next stay
+                                </small>
+                            </span>
+
+                            <b>→</b>
+
+                        </button>
+
+
+                        <button
+                            class="quick-action"
+                            type="button"
+                            data-coming-soon
+                        >
+
+                            <span class="quick-action-icon">
+                                ₹
+                            </span>
+
+                            <span>
+                                <strong>
+                                    Track expenses
+                                </strong>
+
+                                <small>
+                                    Keep your travel budget on track
+                                </small>
+                            </span>
+
+                            <b>→</b>
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 RECENT BOOKINGS
+            ================================================== -->
+
+            <section class="dashboard-card bookings-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            YOUR ACTIVITY
+                        </span>
+
+                        <h2>
+                            Recent bookings
+                        </h2>
+
+                    </div>
+
+                    <button
+                        class="text-button"
+                        type="button"
+                        data-coming-soon
+                    >
+                        View all →
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="table-container"
+                    id="bookingsContainer"
+                >
+
+                    <div class="loading-table">
+
+                        <div></div>
+                        <div></div>
+                        <div></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RECENT TRIPS
+            ================================================== -->
+
+            <section class="dashboard-card trips-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="card-eyebrow">
+                            YOUR JOURNEYS
+                        </span>
+
+                        <h2>
+                            Recent trips
+                        </h2>
+
+                    </div>
+
+                    <button
+                        class="text-button"
+                        type="button"
+                        data-coming-soon
+                    >
+                        View all →
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="trips-list"
+                    id="tripsContainer"
+                >
+
+                    <div class="loading-table">
+
+                        <div></div>
+                        <div></div>
+                        <div></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- FOOTER -->
+
+            <footer class="dashboard-footer">
+
+                <span>
+                    © 2026 TripFusion AI
+                </span>
+
+                <span>
+                    Travel smarter. Travel better.
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- =================================================
+         TOAST
+    ================================================== -->
+
+    <div
+        class="toast"
+        id="toast"
+    >
+        <span id="toastIcon">✓</span>
+        <span id="toastMessage"></span>
+    </div>
+
+
+    <script src="js/api.js"></script>
+
+    <script src="js/auth.js"></script>
+
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>

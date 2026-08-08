@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Trip Details | TripFusion AI</title>
+
+    <link
+        rel="stylesheet"
+        href="css/trip-details.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- SIDEBAR -->
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div>
+
+            <a
+                href="dashboard.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">✈</span>
+
+                <span>
+                    TripFusion <strong>AI</strong>
+                </span>
+
+            </a>
+
+
+            <button
+                class="close-sidebar"
+                id="closeSidebar"
+            >
+                ×
+            </button>
+
+
+            <nav>
+
+                <p class="nav-label">
+                    MAIN MENU
+                </p>
+
+
+                <a
+                    href="dashboard.html"
+                    class="nav-item"
+                >
+                    <span>⌂</span>
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="my-trips.html"
+                    class="nav-item active"
+                >
+                    <span>✈</span>
+                    My Trips
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>✦</span>
+                    AI Trip Planner
+                    <small>AI</small>
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>◎</span>
+                    Destinations
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>⌂</span>
+                    Hotels
+                </a>
+
+
+                <p class="nav-label manage">
+                    MANAGE
+                </p>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>▣</span>
+                    Bookings
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>₹</span>
+                    Expenses
+                </a>
+
+
+                <a
+                    href="#"
+                    class="nav-item"
+                    data-coming-soon
+                >
+                    <span>♙</span>
+                    Profile
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="travel-box">
+
+                <span>✦</span>
+
+                <div>
+                    <strong>Travel smarter</strong>
+                    <small>Powered by AI</small>
+                </div>
+
+            </div>
+
+
+            <button
+                id="logoutButton"
+                class="logout-button"
+            >
+                ↪ &nbsp; Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <button
+                class="menu-button"
+                id="menuButton"
+            >
+                ☰
+            </button>
+
+
+            <div>
+
+                <span class="top-label">
+                    YOUR JOURNEYS
+                </span>
+
+                <strong>
+                    Trip Details
+                </strong>
+
+            </div>
+
+
+            <div class="user-area">
+
+                <div
+                    class="avatar"
+                    id="topAvatar"
+                >
+                    T
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="topUserName">
+                        Traveler
+                    </strong>
+
+                    <span id="topUserEmail">
+                        ...
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE -->
+        <div class="page">
+
+
+            <!-- BACK -->
+            <button
+                class="back-button"
+                id="backButton"
+            >
+                ← &nbsp; Back to My Trips
+            </button>
+
+
+            <!-- LOADING -->
+            <div
+                id="loading"
+                class="loading"
+            >
+
+                <div class="loading-hero"></div>
+
+                <div class="loading-line"></div>
+
+                <div class="loading-line short"></div>
+
+                <div class="loading-grid">
+
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ERROR -->
+            <section
+                id="errorState"
+                class="error-state hidden"
+            >
+
+                <div class="error-icon">
+                    !
+                </div>
+
+                <h2>
+                    Unable to load trip
+                </h2>
+
+                <p id="errorMessage">
+                    Something went wrong.
+                </p>
+
+                <button
+                    class="primary-button"
+                    onclick="window.location.href='my-trips.html'"
+                >
+                    Back to My Trips
+                </button>
+
+            </section>
+
+
+            <!-- CONTENT -->
+            <div
+                id="tripContent"
+                class="hidden"
+            >
+
+
+                <!-- HERO -->
+                <section class="trip-hero">
+
+                    <div class="hero-content">
+
+                        <span
+                            class="ai-label"
+                            id="aiLabel"
+                        >
+                            ✦ AI PLANNED TRIP
+                        </span>
+
+                        <h1 id="tripTitle">
+                            Trip
+                        </h1>
+
+                        <p id="destination">
+                            Destination
+                        </p>
+
+                        <div class="hero-meta">
+
+                            <span id="heroDates">
+                                —
+                            </span>
+
+                            <span>•</span>
+
+                            <span id="heroDuration">
+                                —
+                            </span>
+
+                            <span>•</span>
+
+                            <span id="heroTravelers">
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="hero-actions">
+
+                        <button
+                            class="hero-button"
+                            id="pdfButton"
+                        >
+                            ↓ PDF
+                        </button>
+
+                        <button
+                            class="hero-button danger"
+                            id="deleteButton"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- OVERVIEW -->
+                <section class="section">
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                THE BASICS
+                            </span>
+
+                            <h2>
+                                Trip Overview
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-grid">
+
+                        <div class="overview-card">
+
+                            <span>START DATE</span>
+
+                            <strong id="startDate">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="overview-card">
+
+                            <span>END DATE</span>
+
+                            <strong id="endDate">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="overview-card">
+
+                            <span>DURATION</span>
+
+                            <strong id="totalDays">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="overview-card">
+
+                            <span>TRAVELERS</span>
+
+                            <strong id="travelers">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="overview-card">
+
+                            <span>TRIP TYPE</span>
+
+                            <strong id="tripType">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="overview-card">
+
+                            <span>STATUS</span>
+
+                            <span
+                                id="status"
+                                class="status-pill"
+                            >
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- INTERESTS -->
+                <section
+                    class="section"
+                    id="interestsSection"
+                >
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                PERSONALIZED FOR YOU
+                            </span>
+
+                            <h2>
+                                Travel Interests
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="interests"
+                        class="chips"
+                    ></div>
+
+                </section>
+
+
+                <!-- ITINERARY -->
+                <section class="section">
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                AI ITINERARY
+                            </span>
+
+                            <h2>
+                                Your Journey
+                            </h2>
+
+                            <p>
+                                A day-by-day plan created
+                                around your trip.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="itinerary"
+                        class="itinerary"
+                    ></div>
+
+                </section>
+
+
+                <!-- BOTTOM GRID -->
+                <div class="two-column">
+
+
+                    <!-- BUDGET -->
+                    <section class="section compact">
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-kicker">
+                                    MONEY
+                                </span>
+
+                                <h2>
+                                    Budget Breakdown
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="budgetBreakdown"
+                            class="budget-list"
+                        ></div>
+
+
+                        <div class="budget-total">
+
+                            <span>
+                                Estimated Budget
+                            </span>
+
+                            <strong id="estimatedBudget">
+                                ₹0
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- WEATHER -->
+                    <section class="section compact">
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-kicker">
+                                    WEATHER
+                                </span>
+
+                                <h2>
+                                    Weather Advice
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="weatherAdvice"
+                            class="weather-card"
+                        >
+                            No weather advice available.
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- RECOMMENDATIONS -->
+                <div class="two-column">
+
+
+                    <!-- HOTELS -->
+                    <section class="section compact">
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-kicker">
+                                    STAY
+                                </span>
+
+                                <h2>
+                                    Recommended Hotels
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="hotels"
+                            class="recommendations"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- RESTAURANTS -->
+                    <section class="section compact">
+
+                        <div class="section-heading">
+
+                            <div>
+
+                                <span class="section-kicker">
+                                    FOOD
+                                </span>
+
+                                <h2>
+                                    Recommended Restaurants
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="restaurants"
+                            class="recommendations"
+                        ></div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- PACKING -->
+                <section
+                    class="section"
+                    id="packingSection"
+                >
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                PREPARATION
+                            </span>
+
+                            <h2>
+                                Packing Tips
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="packingTips"
+                        class="packing-grid"
+                    ></div>
+
+                </section>
+
+
+            </div>
+
+
+            <footer class="footer">
+
+                <span>
+                    © 2026 TripFusion AI
+                </span>
+
+                <span>
+                    Travel smarter. Travel better.
+                </span>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- DELETE MODAL -->
+    <div
+        class="modal"
+        id="deleteModal"
+    >
+
+        <div class="confirm-box">
+
+            <div class="confirm-icon">
+                !
+            </div>
+
+            <h2>
+                Delete this trip?
+            </h2>
+
+            <p>
+                This action cannot be undone.
+            </p>
+
+
+            <div class="confirm-actions">
+
+                <button
+                    id="cancelDelete"
+                    class="cancel-button"
+                >
+                    Keep Trip
+                </button>
+
+                <button
+                    id="confirmDelete"
+                    class="delete-confirm"
+                >
+                    Delete Trip
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+
+    <script src="js/api.js"></script>
+
+    <script src="js/auth.js"></script>
+
+    <script src="js/trip-details.js"></script>
+
+</body>
+
+</html>

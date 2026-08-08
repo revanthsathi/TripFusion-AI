@@ -29,6 +29,7 @@ const recommendationRoutes = require("./routes/recommendationRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const favoriteRoutes = require("./routes/favoriteRoutes");
 const pdfRoutes = require("./routes/pdfRoutes");
+const userDashboardRoutes = require("./routes/userDashboardRoutes");
 //const paymentRoutes = require("./routes/paymentRoutes");
 
 const app = express();
@@ -73,6 +74,10 @@ app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/pdf", pdfRoutes);
+app.use(
+    "/api/user-dashboard",
+    userDashboardRoutes
+);
 //app.use("/api/payments", paymentRoutes);
 
 // =======================
